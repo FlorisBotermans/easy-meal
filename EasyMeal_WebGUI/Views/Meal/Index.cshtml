@@ -1,0 +1,10 @@
+﻿@model IEnumerable<Meal>
+
+<h2>Maaltijden voor volgende week</h2>
+
+<div class="card-columns">
+    @foreach (var m in Model)
+    {
+        @await Html.PartialAsync("MealSummary", m)
+    }
+</div>

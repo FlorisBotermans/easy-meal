@@ -1,0 +1,22 @@
+﻿@model EasyMeal_WebGUI.Models.ViewModels.LoginViewModel
+
+<h2>Log In</h2>
+<div class="row">
+    <div class="col-md-4">
+        <div class="text-danger" asp-validation-summary="All"></div>
+        <form asp-action="Login" asp-controller="Account" method="post">
+            <input type="hidden" asp-for="ReturnUrl" />
+            <div class="form-group">
+                <label asp-for="Username">Email:</label>
+                <span asp-validation-for="Username" class="text-danger"></span>
+                <input asp-for="Username" class="form-control" placeholder="Voer hier uw email in.">
+            </div>
+            <div class="form-group">
+                <label asp-for="Password">Wachtwoord:</label>
+                <span asp-validation-for="Password" class="text-danger"></span>
+                <input asp-for="Password" class="form-control" placeholder="Voer hier uw wachtwoord in.">
+            </div>
+            <button type="submit" class="btn btn-default" typeof="submit">Inloggen</button>
+        </form>
+    </div>
+</div>

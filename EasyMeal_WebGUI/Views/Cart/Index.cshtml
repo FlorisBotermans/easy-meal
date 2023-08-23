@@ -1,0 +1,88 @@
+﻿@model List<MealSizeViewModel>
+
+<h2>Jouw bestelling</h2>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Datum</th>
+            <th>Hoofdgerecht</th>
+            <th>Voorgerecht</th>
+            <th>Nagerecht</th>
+            <th>Portie</th>
+            <th>Prijs</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (MealSizeViewModel mealSizeViewModel in Model)
+        {
+            <tr>
+                @{
+                    string day = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(mealSizeViewModel.Meal.Date.DayOfWeek);
+                }
+                <td class="text-left">@mealSizeViewModel.Meal.Date.Day-@mealSizeViewModel.Meal.Date.Month-@mealSizeViewModel.Meal.Date.Year - @day</td>
+                <td class="text-left">@mealSizeViewModel.Meal.Name</td>
+                <td class="text-left">
+                    @if (mealSizeViewModel.Meal.Starter == null)
+                    {<span style="color:darkred">Geen</span> }
+                    else
+                    { @mealSizeViewModel.Meal.Starter}
+                </td>
+                <td class="text-left">
+                    @if (mealSizeViewModel.Meal.Dessert == null)
+                    {<span style="color:darkred">Geen</span> }
+                    else
+                    { @mealSizeViewModel.Meal.Dessert}
+                </td>
+                <td class="text-left">@mealSizeViewModel.Size</td>
+                <td class="text-left">@mealSizeViewModel.Meal.Price.ToString("c")</td>
+                <td>
+                    <a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-mealId="@mealSizeViewModel.Meal.MealId" class="btn btn-sm btn-danger">Verwijder</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3" class="text-right">Subtotaal:</td>
+            <td class="text-right">
+                @Model.Sum(m => m.Meal.Price).ToString("c")
+            </td>
+        </tr>
+    </tfoot>
+</table>
+<div>
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <form asp-controller="Customer" asp-action="AddOrderToCustomer" method="post">
+        @{
+            int amountOfWeekDays = 0;
+
+            foreach (MealSizeViewModel mealSizeViewModel in Model)
+            {
+                if (mealSizeViewModel.Meal.Date.DayOfWeek == DayOfWeek.Monday
+                    || mealSizeViewModel.Meal.Date.DayOfWeek == DayOfWeek.Tuesday
+                    || mealSizeViewModel.Meal.Date.DayOfWeek == DayOfWeek.Wednesday
+                    || mealSizeViewModel.Meal.Date.DayOfWeek == DayOfWeek.Thursday
+                    || mealSizeViewModel.Meal.Date.DayOfWeek == DayOfWeek.Friday)
+                {
+                    amountOfWeekDays += 1;
+                }
+            }
+
+            if (Model.Count < 4 || amountOfWeekDays < 4)
+            {
+                <div>
+                    <p class="text-danger">Bestel minimaal voor 4 werkdagen een maaltijd. Je hebt voor @amountOfWeekDays werkdag(en) al een maaltijd besteld.</p>
+                    <a asp-action="Index" asp-controller="Meal" class="btn btn-sm btn-primary">Verder met bestellen</a>
+                    &nbsp;<button class="btn btn-sm btn-success disabled" type="submit">Bestel</button>
+                </div>
+            }
+            else
+            {
+                <div>
+                    <a asp-action="Index" asp-controller="Meal" class="btn btn-sm btn-primary">Verder met bestellen</a>
+                    &nbsp;<button class="btn btn-sm btn-success" type="submit">Bestel</button>
+                </div>
+            }
+        }
+    </form>
+</div>

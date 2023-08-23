@@ -1,0 +1,12 @@
+﻿.card {
+    margin-bottom: 10px;
+}
+
+body {
+    font-family:'Bookman Old Style';
+    /*font-family:'Goudy Old Style';*/
+    /*font-family:'Century Schoolbook';*/
+    /*font-family:'Baskerville Old Face';*/
+    /*font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;*/
+    font-family: Railway;
+}

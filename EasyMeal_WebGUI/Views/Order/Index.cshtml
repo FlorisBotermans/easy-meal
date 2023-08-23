@@ -1,0 +1,16 @@
+﻿@model List<MealSizeViewModel>
+
+<div id="categories" class="col-4">
+    <div class="card card-outline-primary m-1 p-1">
+        <div class="bg-faded p-1">
+            <p><strong>Jouw bestelling voor volgende week</strong></p>
+            @foreach (MealSizeViewModel mealSizeViewModel in Model)
+            {
+                <p>
+                    @mealSizeViewModel.Meal.Name
+                </p>
+            }
+            <a asp-controller="Cart" asp-action="Index" class="btn btn-sm btn-primary">Pas bestelling aan</a>
+        </div>
+    </div>
+</div>

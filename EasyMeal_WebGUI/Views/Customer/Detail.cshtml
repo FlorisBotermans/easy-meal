@@ -1,0 +1,27 @@
+﻿@model CustomerOrderViewModel
+
+<h2>Hey @Model.Customer.getFullName(), Dit is je bestelling voor volgende week</h2>
+
+@foreach (MealSizeViewModel mealSizeViewModel in Model.MealSizeViewModels) {
+<div class="card">
+    <div class="card-header">
+        <span style="font-size:22px"><strong>@mealSizeViewModel.Meal.Name</strong></span>
+        @{
+            string day = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(mealSizeViewModel.Meal.Date.DayOfWeek);
+        }
+        <span>&nbsp;&nbsp;<i class="far fa-clock pr-2"></i>@mealSizeViewModel.Meal.Date.Day-@mealSizeViewModel.Meal.Date.Month-@mealSizeViewModel.Meal.Date.Year - @day</span>
+        <span class="badge badge-pill badge-primary" style="float:right">
+            <span>@mealSizeViewModel.Meal.Price.ToString("c")</span>
+        </span>
+    </div>
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <form asp-action="AddToCart" asp-controller="Cart" asp-route-mealId="@mealSizeViewModel.Meal.MealId" method="post">
+        <div class="card-body">
+            <h5 class="card-title">Hoofdgerecht - @mealSizeViewModel.Meal.Name</h5>
+            <p class="card-text">@mealSizeViewModel.Meal.Description</p>
+            <p><b>Voorgerecht:</b> @mealSizeViewModel.Meal.Starter</p>
+            <p><b>Nagerecht:</b> @mealSizeViewModel.Meal.Dessert</p>
+        </div>
+    </form>
+</div>
+}

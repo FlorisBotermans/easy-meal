@@ -1,0 +1,15 @@
+﻿@model Cart
+
+<div>
+    @if (Model.Lines.Count() > 0)
+    {
+        <small class="navbar-text">
+            <b>Subtotaal:</b>
+            @Model.ComputeTotalValue().ToString("c")
+        </small>
+
+        <a asp-controller="Cart" asp-action="Index" class="btn btn-sm btn-secondary navbar-btn">
+            <i class="fa fa-shopping-cart"></i>
+        </a>
+    }
+</div>

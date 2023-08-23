@@ -1,0 +1,51 @@
+﻿@model Meal
+
+<div class="card" style="display:inline-block">
+    <div class="card-header">
+        <div>
+            <strong style="font-size:20px">@Model.Name</strong>    
+            <span class="badge badge-pill badge-primary" style="float:right">
+                <span>@Model.Price.ToString("c")</span>
+            </span>
+        </div>
+        @{
+            string day = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(Model.Date.DayOfWeek);
+        }
+        <span><i class="far fa-clock pr-2"></i>@Model.Date.Day-@Model.Date.Month-@Model.Date.Year - @day</span>
+    </div>
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <form asp-action="AddToCart" asp-controller="Cart" asp-route-mealId="@Model.MealId" method="post">
+        <div class="card-body">
+            <h5 class="card-title">Hoofdgerecht - @Model.Name</h5>
+            <p class="card-text">@Model.Description</p>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <select class="col-10 form-control" name="size" style="margin-bottom:4px">
+                    <option>Klein (-20%)</option>
+                    <option selected>Medium</option>
+                    <option>Groot (+20%)</option>
+                </select>
+                <select id="isStarter-@Model.MealId" onchange="check('isStarter-@Model.MealId', 'isDessert-@Model.MealId', 'addToOrderButton-@Model.MealId', 'failToAddSpan-@Model.MealId');" class="col-10 form-control" name="isStarter" style="margin-bottom:4px">
+                    <option value="true">Voorgerecht: @Model.Starter</option>
+                    <option value="false">Geen voorgerecht</option>
+                </select>
+                <select id="isDessert-@Model.MealId" onchange="check('isStarter-@Model.MealId', 'isDessert-@Model.MealId', 'addToOrderButton-@Model.MealId', 'failToAddSpan-@Model.MealId');" class="col-10 form-control" name="isDessert">
+                    <option value="true">Nagerecht: @Model.Dessert</option>
+                    <option value="false">Geen nagerecht</option>
+                </select>
+            }
+            else
+            {
+                <p><b>Voorgerecht:</b> @Model.Starter</p>
+                <p><b>Nagerecht:</b> @Model.Dessert</p>
+            }
+        </div>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="card-footer">
+                <button id="addToOrderButton-@Model.MealId" type="submit" class="btn btn-primary btn-sm">Toevoegen</button>
+                <span id="failToAddSpan-@Model.MealId" style="visibility: hidden" class="text-danger">&nbsp;Kies minimaal twee gangen</span>
+            </div>
+        }
+    </form>
+</div>
